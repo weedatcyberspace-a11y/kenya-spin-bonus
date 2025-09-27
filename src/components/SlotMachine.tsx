@@ -6,7 +6,7 @@ import { toast } from "@/hooks/use-toast";
 import { Play, Pause, Coins, Zap } from "lucide-react";
 
 const SLOT_SYMBOLS = ['🍒', '🍋', '🍊', '🔔', '⭐', '💎', '7️⃣'];
-const BET_AMOUNT = 50; // KSH 50 per spin
+const STAKE_OPTIONS = [10, 25, 50, 100, 200, 500]; // Available stake amounts
 
 interface SlotMachineProps {
   balance: number;
@@ -26,6 +26,7 @@ export const SlotMachine = ({
   const [reels, setReels] = useState(['🍒', '🍋', '🍊']);
   const [isSpinning, setIsSpinning] = useState(false);
   const [lastWin, setLastWin] = useState(0);
+  const [currentStake, setCurrentStake] = useState(50);
   const spinTimeoutRef = useRef<NodeJS.Timeout>();
 
   const calculateWin = (symbols: string[]) => {
@@ -56,10 +57,10 @@ export const SlotMachine = ({
 
     const usingFreeSpins = freeSpins > 0;
     
-    if (!usingFreeSpins && balance < BET_AMOUNT) {
+    if (!usingFreeSpins && balance < currentStake) {
       toast({
         title: "Insufficient Balance",
-        description: `You need at least KSH ${BET_AMOUNT} to spin`,
+        description: `You need at least KSH ${currentStake} to spin`,
         variant: "destructive",
       });
       return;
@@ -72,7 +73,7 @@ export const SlotMachine = ({
     if (usingFreeSpins) {
       onFreeSpinsChange(freeSpins - 1);
     } else {
-      onBalanceChange(balance - BET_AMOUNT);
+      onBalanceChange(balance - currentStake);
     }
 
     // Animate spinning
@@ -131,13 +132,29 @@ export const SlotMachine = ({
           🎰 Slot Machine
         </CardTitle>
         <div className="flex items-center justify-center gap-4 text-muted-foreground">
-          <span>Bet: KSH {BET_AMOUNT}</span>
+          <span>Stake: KSH {currentStake}</span>
           {freeSpins > 0 && (
             <Badge variant="secondary" className="bg-accent/20 text-accent border-accent/30">
               <Zap className="w-3 h-3 mr-1" />
               {freeSpins} Free Spins
             </Badge>
           )}
+        </div>
+        
+        {/* Stake Controls */}
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <span className="text-sm text-muted-foreground">Stake:</span>
+          {STAKE_OPTIONS.map((stake) => (
+            <Button
+              key={stake}
+              size="sm"
+              variant={currentStake === stake ? "default" : "outline"}
+              onClick={() => setCurrentStake(stake)}
+              className="h-8 px-3 text-xs"
+            >
+              KSH {stake}
+            </Button>
+          ))}
         </div>
       </CardHeader>
 
@@ -175,7 +192,7 @@ export const SlotMachine = ({
         <div className="flex justify-center">
           <Button
             onClick={spin}
-            disabled={isSpinning || (!freeSpins && balance < BET_AMOUNT)}
+            disabled={isSpinning || (!freeSpins && balance < currentStake)}
             className={`
               w-32 h-32 rounded-full text-xl font-bold shadow-2xl transition-all duration-300
               ${isSpinning 
