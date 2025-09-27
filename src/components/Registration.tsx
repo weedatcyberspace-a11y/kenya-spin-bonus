@@ -12,11 +12,13 @@ interface RegistrationProps {
 export const Registration = ({ onRegister }: RegistrationProps) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim()) {
+    if (!name.trim() || !phone.trim() || !password.trim() || !confirmPassword.trim()) {
       toast({
         title: "Error",
         description: "Please fill in all fields",
@@ -25,14 +27,32 @@ export const Registration = ({ onRegister }: RegistrationProps) => {
       return;
     }
 
+    if (password.length < 8) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 8 characters long",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Passwords do not match",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     
-    // Simulate registration delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Simulate realistic registration processing
+    await new Promise(resolve => setTimeout(resolve, 1500));
     
     toast({
-      title: "Welcome Bonus!",
-      description: "KSH 500 added to your account!",
+      title: "Registration Successful!",
+      description: "Welcome bonus of KSH 500 has been credited to your account",
       className: "bg-gradient-primary border-primary",
     });
     
@@ -52,7 +72,7 @@ export const Registration = ({ onRegister }: RegistrationProps) => {
             <Coins className="w-10 h-10 text-primary-foreground" />
           </div>
           <CardTitle className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Join Casino
+            Royal Casino
           </CardTitle>
           <div className="flex items-center justify-center gap-2 text-success">
             <Sparkles className="w-5 h-5" />
@@ -85,6 +105,28 @@ export const Registration = ({ onRegister }: RegistrationProps) => {
               />
             </div>
 
+            <div>
+              <Input
+                type="password"
+                placeholder="Create Password (min 8 characters)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="h-12 bg-input border-border text-foreground placeholder:text-muted-foreground"
+                disabled={isLoading}
+              />
+            </div>
+
+            <div>
+              <Input
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="h-12 bg-input border-border text-foreground placeholder:text-muted-foreground"
+                disabled={isLoading}
+              />
+            </div>
+
             <Button
               type="submit"
               disabled={isLoading}
@@ -93,10 +135,10 @@ export const Registration = ({ onRegister }: RegistrationProps) => {
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin"></div>
-                  Creating Account...
+                  Processing Registration...
                 </div>
               ) : (
-                "Join & Get KSH 500"
+                "Create Account & Get KSH 500"
               )}
             </Button>
           </form>
