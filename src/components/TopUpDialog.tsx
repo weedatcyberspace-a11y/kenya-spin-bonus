@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import { CreditCard, ExternalLink, AlertCircle } from "lucide-react";
+import { CreditCard, ExternalLink, AlertCircle, Smartphone } from "lucide-react";
 
 interface TopUpDialogProps {
   open: boolean;
@@ -29,8 +29,8 @@ export const TopUpDialog = ({ open, onClose, onTopUp }: TopUpDialogProps) => {
     window.open('https://store.pesapal.com/moneyflow', '_blank');
     
     toast({
-      title: "Redirecting to PesaPal",
-      description: "Complete your payment to add funds to your account",
+      title: "Redirecting to MPESA",
+      description: "Complete your MPESA payment to add funds to your account",
       className: "bg-primary/20 border-primary text-primary-foreground",
     });
   };
@@ -51,14 +51,14 @@ export const TopUpDialog = ({ open, onClose, onTopUp }: TopUpDialogProps) => {
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* PesaPal Integration Notice */}
+          {/* MPESA Integration Notice */}
           <div className="p-4 bg-primary/10 border border-primary/30 rounded-lg">
             <div className="flex items-start gap-2">
-              <ExternalLink className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+              <Smartphone className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-primary">Secure Payment via PesaPal</p>
+                <p className="font-semibold text-primary">Secure Payment via MPESA</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Your payment is processed securely through PesaPal's payment gateway.
+                  Your payment is processed securely through MPESA mobile payment.
                 </p>
               </div>
             </div>
@@ -97,7 +97,7 @@ export const TopUpDialog = ({ open, onClose, onTopUp }: TopUpDialogProps) => {
             </div>
           </div>
 
-          {/* PesaPal Payment Integration */}
+          {/* MPESA Payment Integration */}
           <div className="space-y-3">
             <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
               <iframe 
@@ -126,8 +126,8 @@ export const TopUpDialog = ({ open, onClose, onTopUp }: TopUpDialogProps) => {
                 disabled={!amount || parseInt(amount) < 100}
                 className="flex-1 bg-gradient-primary hover:opacity-90 text-primary-foreground"
               >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Pay with PesaPal
+                <Smartphone className="w-4 h-4 mr-2" />
+                MPESA
               </Button>
             </div>
           </div>
