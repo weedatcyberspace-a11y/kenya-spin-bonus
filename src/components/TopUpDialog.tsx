@@ -22,43 +22,14 @@ export const TopUpDialog = ({ open, onClose, onTopUp }: TopUpDialogProps) => {
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleTopUp = async () => {
-    const topUpAmount = parseInt(amount);
-    
-    if (!amount || topUpAmount < 100) {
-      toast({
-        title: "Invalid Amount",
-        description: "Minimum top-up is KSH 100",
-        variant: "destructive",
-      });
-      return;
-    }
+  // Remove the demo handleTopUp function as it's no longer needed
 
-    setIsProcessing(true);
-    
-    // In a real app, this would redirect to PayHero
-    // For demo purposes, we'll simulate the payment
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    onTopUp(topUpAmount);
+  const handlePesaPalPayment = () => {
+    // Open PesaPal payment page
+    window.open('https://store.pesapal.com/moneyflow', '_blank');
     
     toast({
-      title: "Top-up Successful!",
-      description: `KSH ${topUpAmount} has been added to your account`,
-      className: "bg-success/20 border-success text-success-foreground",
-    });
-    
-    setAmount("");
-    onClose();
-    setIsProcessing(false);
-  };
-
-  const handlePayHeroRedirect = () => {
-    // In a real implementation, this would redirect to PayHero with proper parameters
-    window.open('https://app.payhero.co.ke/lipwa/3277', '_blank');
-    
-    toast({
-      title: "Redirecting to PayHero",
+      title: "Redirecting to PesaPal",
       description: "Complete your payment to add funds to your account",
       className: "bg-primary/20 border-primary text-primary-foreground",
     });
@@ -80,14 +51,14 @@ export const TopUpDialog = ({ open, onClose, onTopUp }: TopUpDialogProps) => {
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* PayHero Integration Notice */}
+          {/* PesaPal Integration Notice */}
           <div className="p-4 bg-primary/10 border border-primary/30 rounded-lg">
             <div className="flex items-start gap-2">
               <ExternalLink className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-primary">Secure Payment via PayHero</p>
+                <p className="font-semibold text-primary">Secure Payment via PesaPal</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Your payment is processed securely through PayHero's payment gateway.
+                  Your payment is processed securely through PesaPal's payment gateway.
                 </p>
               </div>
             </div>
@@ -126,14 +97,17 @@ export const TopUpDialog = ({ open, onClose, onTopUp }: TopUpDialogProps) => {
             </div>
           </div>
 
-          {/* Demo vs Real Payment Options */}
+          {/* PesaPal Payment Integration */}
           <div className="space-y-3">
-            <div className="flex items-start gap-2 p-3 bg-muted/20 border border-border rounded-lg">
-              <AlertCircle className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-muted-foreground">
-                <p className="font-semibold">Demo Mode:</p>
-                <p>This is a demonstration. Use "Demo Top-up" for testing or "PayHero Payment" for real transactions.</p>
-              </div>
+            <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
+              <iframe 
+                width="100%" 
+                height="60" 
+                src="https://store.pesapal.com/embed-code?pageUrl=https://store.pesapal.com/moneyflow" 
+                frameBorder="0" 
+                allowFullScreen
+                className="rounded-md"
+              ></iframe>
             </div>
 
             {/* Action Buttons */}
@@ -146,29 +120,14 @@ export const TopUpDialog = ({ open, onClose, onTopUp }: TopUpDialogProps) => {
               >
                 Cancel
               </Button>
-              
-              <Button
-                onClick={handleTopUp}
-                disabled={isProcessing || !amount || parseInt(amount) < 100}
-                className="flex-1 bg-gradient-secondary hover:opacity-90 text-secondary-foreground"
-              >
-                {isProcessing ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-secondary-foreground border-t-transparent rounded-full animate-spin"></div>
-                    Processing...
-                  </div>
-                ) : (
-                  "Demo Top-up"
-                )}
-              </Button>
 
               <Button
-                onClick={handlePayHeroRedirect}
+                onClick={handlePesaPalPayment}
                 disabled={!amount || parseInt(amount) < 100}
                 className="flex-1 bg-gradient-primary hover:opacity-90 text-primary-foreground"
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
-                PayHero Payment
+                Pay with PesaPal
               </Button>
             </div>
           </div>
